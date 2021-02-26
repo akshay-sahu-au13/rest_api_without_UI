@@ -3,6 +3,8 @@ const router = express.Router();
 // const MongoInit = require('../config/mongodb');
 const User = require('../model/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
 
 router.get('/users', (req, res) => {
     User.find({}, (err, data) => {
@@ -45,6 +47,7 @@ router.post('/login', (req, res) => {
                     msg: "Invalid password"
                 })
             }
+            const token = jwt.sign({id: user._id}, config.secret, '10d')
             res.status(200).send({ msg: "Login Success" });
         }
     })
